@@ -1,0 +1,4 @@
+# Temporary and generated files
+temp_*
+temp_run_simple.js
+*.log
