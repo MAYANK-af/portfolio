@@ -1,1 +1,197 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="theme-color" content="#0a0a0a"/><meta name="description" content="3D interactive portfolio of Mayank Yadav — Agentic AI, LLM systems, and cinematic scroll-driven web experiences from Jaipur, India."/><meta property="og:title" content="Mayank Yadav — Agentic AI Engineer & Cinematic UI Architect"/><meta property="og:description" content="3D interactive portfolio showcasing Agentic AI, LLM systems, and cinematic scroll-driven web experiences."/><meta property="og:type" content="website"/><meta property="og:url" content="https://mayank-af.github.io/portfolio/"/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:title" content="Mayank Yadav — Portfolio"/><meta name="twitter:description" content="Agentic AI Engineer & Cinematic UI Architect from Jaipur, India."/><link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet"/><title>Mayank Yadav — Agentic AI Engineer & Cinematic UI Architect</title><script>!function(){try{var t=localStorage.getItem("portfolio-theme")||"dark";document.documentElement.classList.add("light"===t?"theme-light":"theme-dark")}catch(t){document.documentElement.classList.add("theme-dark")}}()</script><script defer="defer" src="static/js/main.e1c64cec.js?v=7"></script><link href="static/css/main.ec87ac61.css" rel="stylesheet"></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div id="root"></div></body></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="theme-color" content="#0a0a0a"/><meta name="description" content="3D interactive portfolio of Mayank Yadav — Agentic AI, LLM systems, and cinematic scroll-driven web experiences from Jaipur, India."/><meta property="og:title" content="Mayank Yadav — Agentic AI Engineer & Cinematic UI Architect"/><meta property="og:description" content="3D interactive portfolio showcasing Agentic AI, LLM systems, and cinematic scroll-driven web experiences."/><meta property="og:type" content="website"/><meta property="og:url" content="https://mayank-af.github.io/portfolio/"/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:title" content="Mayank Yadav — Portfolio"/><meta name="twitter:description" content="Agentic AI Engineer & Cinematic UI Architect from Jaipur, India."/><link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet"/><title>Mayank Yadav — Agentic AI Engineer & Cinematic UI Architect</title>
+<style>
+/* ========== 1. SCROLL PROGRESS BAR ========== */
+#scroll-progress{position:fixed;top:0;left:0;width:0%;height:3px;z-index:9999;pointer-events:none;background:linear-gradient(90deg,#06b6d4,#8b5cf6,#ec4899,#06b6d4);background-size:300% 100%;animation:shimmer-progress 3s linear infinite;box-shadow:0 0 12px #8b5cf680,0 0 24px #06b6d440;transition:width 0.05s linear}
+@keyframes shimmer-progress{0%{background-position:0% 50%}100%{background-position:300% 50%}}
+
+/* ========== 2. GLOW ACCENT BORDERS ON CARDS ========== */
+@property --glow-angle{syntax:"<angle>";initial-value:0deg;inherits:false}
+@keyframes glow-rotate{0%{--glow-angle:0deg}100%{--glow-angle:360deg}}
+section [class*="border"][class*="rounded"]:hover,
+a[class*="border"][class*="rounded"]:hover,
+article:hover{
+  border-color:transparent!important;
+  background-image:linear-gradient(hsl(var(--card)),hsl(var(--card))),linear-gradient(var(--glow-angle),#06b6d4,#8b5cf6,#ec4899,#06b6d4);
+  background-origin:border-box;
+  background-clip:padding-box,border-box;
+  animation:glow-rotate 3s linear infinite;
+  box-shadow:0 0 20px #8b5cf620,0 0 40px #06b6d415;
+}
+
+/* ========== 3. ANIMATED GRADIENT MESH BACKGROUND ========== */
+#gradient-mesh{position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:0.4}
+#gradient-mesh::before,#gradient-mesh::after{content:"";position:absolute;border-radius:50%;filter:blur(120px);animation:mesh-drift 20s ease-in-out infinite alternate}
+#gradient-mesh::before{width:50vw;height:50vh;top:-10%;left:-10%;background:radial-gradient(circle,#1e1b4b 0%,transparent 70%);animation-delay:0s}
+#gradient-mesh::after{width:45vw;height:45vh;bottom:-10%;right:-10%;background:radial-gradient(circle,#0c4a6e 0%,transparent 70%);animation-delay:-10s}
+@keyframes mesh-drift{0%{transform:translate(0,0) scale(1)}25%{transform:translate(5vw,8vh) scale(1.1)}50%{transform:translate(-3vw,5vh) scale(0.95)}75%{transform:translate(8vw,-3vh) scale(1.05)}100%{transform:translate(-2vw,-5vh) scale(1)}}
+
+/* ========== 4. SECTION FADE-IN ON SCROLL ========== */
+.reveal-section{opacity:0;transform:translateY(40px);transition:opacity 0.8s cubic-bezier(0.16,1,0.3,1),transform 0.8s cubic-bezier(0.16,1,0.3,1)}
+.reveal-section.revealed{opacity:1;transform:translateY(0)}
+.reveal-section.revealed>*:nth-child(1){transition-delay:0s}
+.reveal-section.revealed>*:nth-child(2){transition-delay:0.08s}
+.reveal-section.revealed>*:nth-child(3){transition-delay:0.16s}
+.reveal-section.revealed>*:nth-child(4){transition-delay:0.24s}
+
+/* ========== 5. TEXT REVEAL ANIMATION FOR HEADINGS ========== */
+.text-reveal{overflow:hidden;display:inline-block}
+.text-reveal-inner{display:inline-block;transform:translateY(110%);transition:transform 0.7s cubic-bezier(0.16,1,0.3,1)}
+.text-reveal.revealed .text-reveal-inner{transform:translateY(0)}
+
+/* ========== 6. MAGNETIC HOVER ========== */
+[data-magnetic]{transition:transform 0.3s cubic-bezier(0.33,1,0.68,1)}
+
+/* ========== 7. NOISE TEXTURE OVERLAY ========== */
+#noise-overlay{position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:0.035;mix-blend-mode:overlay}
+
+/* ========== 8. PAGE LOAD TRANSITION ========== */
+#page-curtain{position:fixed;inset:0;z-index:10000;background:#0a0a0a;display:flex;align-items:center;justify-content:center;transition:opacity 0.6s cubic-bezier(0.16,1,0.3,1),transform 0.6s cubic-bezier(0.16,1,0.3,1)}
+#page-curtain.lift{opacity:0;transform:translateY(-100%);pointer-events:none}
+#page-curtain .loader-ring{width:40px;height:40px;border:2px solid #ffffff15;border-top-color:#8b5cf6;border-radius:50%;animation:loader-spin 0.8s linear infinite}
+@keyframes loader-spin{to{transform:rotate(360deg)}}
+
+/* BONUS: Smooth glow on nav */
+nav,header,[class*="backdrop-blur"]{border-bottom:1px solid #ffffff08!important;box-shadow:0 1px 30px #0a0a0a80}
+
+/* Light theme adjustments */
+.theme-light #gradient-mesh{opacity:0.15}
+.theme-light #noise-overlay{opacity:0.02;mix-blend-mode:multiply}
+.theme-light #page-curtain{background:#fafafa}
+.theme-light #scroll-progress{box-shadow:0 0 12px #8b5cf640}
+</style>
+
+<script>!function(){try{var t=localStorage.getItem("portfolio-theme")||"dark";document.documentElement.classList.add("light"===t?"theme-light":"theme-dark")}catch(t){document.documentElement.classList.add("theme-dark")}}()</script>
+<script defer="defer" src="static/js/main.e1c64cec.js?v=8"></script>
+<link href="static/css/main.ec87ac61.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Page Load Curtain -->
+<div id="page-curtain"><div class="loader-ring"></div></div>
+
+<!-- Scroll Progress Bar -->
+<div id="scroll-progress"></div>
+
+<!-- Animated Gradient Mesh Background -->
+<div id="gradient-mesh"></div>
+
+<!-- Noise Texture Overlay -->
+<svg id="noise-overlay" viewBox="0 0 512 512" preserveAspectRatio="none" style="width:100%;height:100%"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#noiseFilter)"/></svg>
+
+<noscript>You need to enable JavaScript to run this app.</noscript>
+<div id="root"></div>
+
+<script>
+// ===== 1. SCROLL PROGRESS BAR =====
+(function(){
+  var bar=document.getElementById("scroll-progress");
+  function update(){
+    var h=document.documentElement.scrollHeight-window.innerHeight;
+    var p=h>0?(window.scrollY/h)*100:0;
+    bar.style.width=p+"%";
+  }
+  window.addEventListener("scroll",update,{passive:true});
+  update();
+})();
+
+// ===== 4. SECTION FADE-IN ON SCROLL =====
+(function(){
+  function initReveal(){
+    var root=document.getElementById("root");
+    if(!root||!root.children.length)return setTimeout(initReveal,200);
+    var sections=root.querySelectorAll("section");
+    sections.forEach(function(s){
+      if(!s.classList.contains("reveal-section"))s.classList.add("reveal-section");
+    });
+    var observer=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting)e.target.classList.add("revealed");
+      });
+    },{threshold:0.08,rootMargin:"0px 0px -40px 0px"});
+    sections.forEach(function(s){observer.observe(s)});
+    var mo=new MutationObserver(function(){
+      root.querySelectorAll("section:not(.reveal-section)").forEach(function(s){
+        s.classList.add("reveal-section");
+        observer.observe(s);
+      });
+    });
+    mo.observe(root,{childList:true,subtree:true});
+  }
+  initReveal();
+})();
+
+// ===== 5. TEXT REVEAL FOR HEADINGS =====
+(function(){
+  function initTextReveal(){
+    var root=document.getElementById("root");
+    if(!root||!root.children.length)return setTimeout(initTextReveal,300);
+    var headings=root.querySelectorAll("h1,h2,.text-5xl,.text-6xl,.text-7xl");
+    headings.forEach(function(h){
+      if(h.dataset.textReveal)return;
+      h.dataset.textReveal="1";
+      h.classList.add("text-reveal");
+      var inner=document.createElement("span");
+      inner.className="text-reveal-inner";
+      while(h.firstChild)inner.appendChild(h.firstChild);
+      h.appendChild(inner);
+    });
+    var observer=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting)e.target.classList.add("revealed");
+      });
+    },{threshold:0.3});
+    root.querySelectorAll(".text-reveal").forEach(function(h){observer.observe(h)});
+  }
+  initTextReveal();
+})();
+
+// ===== 6. MAGNETIC HOVER ON BUTTONS =====
+(function(){
+  function initMagnetic(){
+    var root=document.getElementById("root");
+    if(!root||!root.children.length)return setTimeout(initMagnetic,400);
+    var btns=root.querySelectorAll("button,a[class*='border']");
+    btns.forEach(function(btn){
+      if(btn.dataset.magnetic)return;
+      btn.dataset.magnetic="1";
+      btn.addEventListener("mousemove",function(e){
+        var rect=btn.getBoundingClientRect();
+        var x=e.clientX-rect.left-rect.width/2;
+        var y=e.clientY-rect.top-rect.height/2;
+        btn.style.transform="translate("+x*0.15+"px,"+y*0.15+"px)";
+      });
+      btn.addEventListener("mouseleave",function(){
+        btn.style.transform="translate(0,0)";
+      });
+    });
+  }
+  initMagnetic();
+})();
+
+// ===== 8. PAGE LOAD TRANSITION =====
+(function(){
+  function liftCurtain(){
+    var curtain=document.getElementById("page-curtain");
+    if(!curtain)return;
+    var root=document.getElementById("root");
+    function check(){
+      if(root&&root.children.length>0){
+        setTimeout(function(){
+          curtain.classList.add("lift");
+          setTimeout(function(){curtain.remove()},800);
+        },300);
+      }else{
+        setTimeout(check,100);
+      }
+    }
+    check();
+  }
+  if(document.readyState==="loading"){
+    document.addEventListener("DOMContentLoaded",liftCurtain);
+  }else{
+    liftCurtain();
+  }
+})();
+</script>
+
+</body></html>
