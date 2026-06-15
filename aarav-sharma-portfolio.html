@@ -81,6 +81,8 @@ nav,header,[class*="backdrop-blur"]{border-bottom:1px solid #ffffff08!important;
   background-color: rgba(11, 11, 14, 0.65) !important;
   backdrop-filter: blur(16px);
   border-color: rgba(255, 255, 255, 0.04) !important;
+  position: relative;
+  overflow: hidden;
 }
 .theme-light article,
 .theme-light section [class*="border"][class*="rounded"],
@@ -88,28 +90,43 @@ nav,header,[class*="backdrop-blur"]{border-bottom:1px solid #ffffff08!important;
   background-color: rgba(240, 237, 228, 0.65) !important;
   backdrop-filter: blur(16px);
   border-color: rgba(0, 0, 0, 0.06) !important;
+  position: relative;
+  overflow: hidden;
 }
 
-/* Mouse spotlight glow inside cards */
-.spotlight-glow {
+/* Mouse spotlight glow via ::before pseudo-elements */
+.theme-dark article::before,
+.theme-dark section [class*="border"][class*="rounded"]::before,
+.theme-dark a[class*="border"][class*="rounded"]::before {
+  content: "";
   position: absolute;
   inset: 0;
   z-index: 0;
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.35s ease;
-  background: radial-gradient(350px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), rgba(139,92,246,0.08), transparent 80%);
+  background: radial-gradient(350px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), rgba(139, 92, 246, 0.08), transparent 80%);
 }
-.theme-light .spotlight-glow {
-  background: radial-gradient(350px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), rgba(6,182,212,0.06), transparent 80%);
+.theme-light article::before,
+.theme-light section [class*="border"][class*="rounded"]::before,
+.theme-light a[class*="border"][class*="rounded"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  background: radial-gradient(350px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), rgba(6, 182, 212, 0.06), transparent 80%);
 }
-article:hover .spotlight-glow,
-section [class*="border"][class*="rounded"]:hover .spotlight-glow,
-a[class*="border"][class*="rounded"]:hover .spotlight-glow {
+
+article:hover::before,
+section [class*="border"][class*="rounded"]:hover::before,
+a[class*="border"][class*="rounded"]:hover::before {
   opacity: 1;
 }
 
-/* Ensure child elements stay above spotlight */
+/* Ensure children stay above spotlight */
 article > *, 
 section [class*="border"][class*="rounded"] > *,
 a[class*="border"][class*="rounded"] > * {
@@ -125,7 +142,7 @@ a[class*="border"][class*="rounded"] > * {
 </style>
 
 <script>!function(){try{var t=localStorage.getItem("portfolio-theme")||"dark";document.documentElement.classList.add("light"===t?"theme-light":"theme-dark")}catch(t){document.documentElement.classList.add("theme-dark")}}()</script>
-<script defer="defer" src="static/js/main.e1c64cec.js?v=10"></script>
+<script defer="defer" src="static/js/main.e1c64cec.js?v=11"></script>
 <link href="static/css/main.ec87ac61.css" rel="stylesheet">
 </head>
 <body>
@@ -163,21 +180,39 @@ a[class*="border"][class*="rounded"] > * {
   function initReveal(){
     var root=document.getElementById("root");
     if(!root||!root.children.length)return setTimeout(initReveal,200);
-    var sections=root.querySelectorAll("section");
-    sections.forEach(function(s){
-      if(!s.classList.contains("reveal-section"))s.classList.add("reveal-section");
-    });
+    
     var observer=new IntersectionObserver(function(entries){
       entries.forEach(function(e){
         if(e.isIntersecting)e.target.classList.add("revealed");
       });
     },{threshold:0.08,rootMargin:"0px 0px -40px 0px"});
-    sections.forEach(function(s){observer.observe(s)});
-    var mo=new MutationObserver(function(){
-      root.querySelectorAll("section:not(.reveal-section)").forEach(function(s){
-        s.classList.add("reveal-section");
-        observer.observe(s);
+    
+    function registerSections(parent){
+      var target = parent || document;
+      target.querySelectorAll("section").forEach(function(s){
+        if(!s.classList.contains("reveal-section")) {
+          s.classList.add("reveal-section");
+          observer.observe(s);
+        }
       });
+    }
+    
+    registerSections(root);
+    
+    var mo=new MutationObserver(function(mutations){
+      var addedSection = false;
+      mutations.forEach(function(m){
+        m.addedNodes.forEach(function(node){
+          if(node.nodeType === 1) { // Element node
+            if(node.tagName === "SECTION" || node.querySelector("section")) {
+              addedSection = true;
+            }
+          }
+        });
+      });
+      if(addedSection) {
+        registerSections(root);
+      }
     });
     mo.observe(root,{childList:true,subtree:true});
   }
@@ -257,55 +292,56 @@ a[class*="border"][class*="rounded"] > * {
   }
 })();
 
-// ===== 9. 3D CARD TILT & SPOTLIGHT EFFECT =====
+// ===== 9. 3D CARD TILT & SPOTLIGHT EFFECT (EVENT DELEGATION) =====
 (function(){
-  function init3DTilt(){
-    var root=document.getElementById("root");
-    if(!root||!root.children.length)return setTimeout(init3DTilt,300);
+  var currentCard = null;
+  
+  document.addEventListener("mousemove", function(e){
+    var target = e.target;
+    if(!target) return;
     
-    var cards=root.querySelectorAll("article, section [class*='border'][class*='rounded'], a[class*='border'][class*='rounded']");
-    cards.forEach(function(card){
-      if(card.dataset.tilt3d)return;
-      card.dataset.tilt3d="1";
-      
-      // Create spotlight element inside the card
-      var glow=document.createElement("div");
-      glow.className="spotlight-glow";
-      card.insertBefore(glow, card.firstChild);
-      
-      card.style.transformStyle="preserve-3d";
-      card.style.transition="transform 0.15s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.15s ease";
-      
-      card.addEventListener("mousemove",function(e){
-        var rect=card.getBoundingClientRect();
-        var x=e.clientX-rect.left;
-        var y=e.clientY-rect.top;
-        
-        card.style.setProperty("--mouse-x", x+"px");
-        card.style.setProperty("--mouse-y", y+"px");
-        
-        var px=x/rect.width;
-        var py=y/rect.height;
-        var tiltX=(0.5-py)*8; // max 8 degrees to keep it subtle and premium
-        var tiltY=(px-0.5)*8;
-        
-        card.style.transform="perspective(1000px) rotateX("+tiltX+"deg) rotateY("+tiltY+"deg) scale3d(1.015,1.015,1.015)";
-      });
-      
-      card.addEventListener("mouseleave",function(){
-        card.style.transform="perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)";
-        card.style.transition="transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.5s ease";
-      });
-      
-      card.addEventListener("mouseenter",function(){
-        card.style.transition="transform 0.15s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.15s ease";
-      });
-    });
+    // Find closest card element
+    var card = target.closest("article, section [class*='border'][class*='rounded'], a[class*='border'][class*='rounded']");
+    
+    if(currentCard && currentCard !== card) {
+      resetCard(currentCard);
+      currentCard = null;
+    }
+    
+    if(!card) return;
+    
+    if(currentCard !== card) {
+      currentCard = card;
+      card.style.transformStyle = "preserve-3d";
+      card.style.transition = "transform 0.1s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.1s ease";
+    }
+    
+    var rect = card.getBoundingClientRect();
+    var x = e.clientX - rect.left;
+    var y = e.clientY - rect.top;
+    
+    card.style.setProperty("--mouse-x", x + "px");
+    card.style.setProperty("--mouse-y", y + "px");
+    
+    var px = x / rect.width;
+    var py = y / rect.height;
+    var tiltX = (0.5 - py) * 8; // Max 8 degrees tilt
+    var tiltY = (px - 0.5) * 8;
+    
+    card.style.transform = "perspective(1000px) rotateX(" + tiltX + "deg) rotateY(" + tiltY + "deg) scale3d(1.015,1.015,1.015)";
+  }, {passive: true});
+  
+  document.addEventListener("mouseleave", function(e){
+    if(currentCard) {
+      resetCard(currentCard);
+      currentCard = null;
+    }
+  }, {passive: true});
+  
+  function resetCard(card) {
+    card.style.transition = "transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.5s ease";
+    card.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)";
   }
-  init3DTilt();
-  var mo=new MutationObserver(init3DTilt);
-  var root=document.getElementById("root");
-  if(root)mo.observe(root,{childList:true,subtree:true});
 })();
 </script>
 
