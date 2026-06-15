@@ -7,6 +7,13 @@
 /* ========== 2. GLOW ACCENT BORDERS ON CARDS ========== */
 @property --glow-angle{syntax:"<angle>";initial-value:0deg;inherits:false}
 @keyframes glow-rotate{0%{--glow-angle:0deg}100%{--glow-angle:360deg}}
+section [class*="border"][class*="rounded"],
+a[class*="border"][class*="rounded"],
+article{
+  position:relative;
+  overflow:hidden;
+  transition:border-color 0.3s,box-shadow 0.3s;
+}
 section [class*="border"][class*="rounded"]:hover,
 a[class*="border"][class*="rounded"]:hover,
 article:hover{
@@ -15,15 +22,18 @@ article:hover{
   background-origin:border-box;
   background-clip:padding-box,border-box;
   animation:glow-rotate 3s linear infinite;
-  box-shadow:0 0 20px #8b5cf620,0 0 40px #06b6d415;
+  box-shadow:0 0 30px rgba(139,92,246,0.15),0 0 50px rgba(6,182,212,0.1);
 }
 
 /* ========== 3. ANIMATED GRADIENT MESH BACKGROUND ========== */
-#gradient-mesh{position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:0.4}
-#gradient-mesh::before,#gradient-mesh::after{content:"";position:absolute;border-radius:50%;filter:blur(120px);animation:mesh-drift 20s ease-in-out infinite alternate}
-#gradient-mesh::before{width:50vw;height:50vh;top:-10%;left:-10%;background:radial-gradient(circle,#1e1b4b 0%,transparent 70%);animation-delay:0s}
-#gradient-mesh::after{width:45vw;height:45vh;bottom:-10%;right:-10%;background:radial-gradient(circle,#0c4a6e 0%,transparent 70%);animation-delay:-10s}
-@keyframes mesh-drift{0%{transform:translate(0,0) scale(1)}25%{transform:translate(5vw,8vh) scale(1.1)}50%{transform:translate(-3vw,5vh) scale(0.95)}75%{transform:translate(8vw,-3vh) scale(1.05)}100%{transform:translate(-2vw,-5vh) scale(1)}}
+#gradient-mesh{position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:0.45}
+#gradient-mesh::before,#gradient-mesh::after,#gradient-mesh-3{content:"";position:absolute;border-radius:50%;filter:blur(130px);pointer-events:none}
+#gradient-mesh::before{width:60vw;height:60vh;top:-10%;left:-10%;background:radial-gradient(circle,rgba(30,27,75,0.75) 0%,transparent 70%);animation:mesh-drift-1 25s ease-in-out infinite alternate}
+#gradient-mesh::after{width:50vw;height:50vh;bottom:-15%;right:-15%;background:radial-gradient(circle,rgba(12,74,110,0.75) 0%,transparent 70%);animation:mesh-drift-2 20s ease-in-out infinite alternate-reverse}
+#gradient-mesh-3{width:45vw;height:45vh;top:25%;left:25%;background:radial-gradient(circle,rgba(76,29,149,0.45) 0%,transparent 70%);animation:mesh-drift-3 22s ease-in-out infinite alternate}
+@keyframes mesh-drift-1{0%{transform:translate(0,0) scale(1)}50%{transform:translate(8vw,12vh) scale(1.15)}100%{transform:translate(-4vw,4vh) scale(0.95)}}
+@keyframes mesh-drift-2{0%{transform:translate(0,0) scale(1)}50%{transform:translate(-10vw,-6vh) scale(0.85)}100%{transform:translate(4vw,-12vh) scale(1.05)}}
+@keyframes mesh-drift-3{0%{transform:translate(0,0) scale(1)}50%{transform:translate(6vw,-8vh) scale(1.1)}100%{transform:translate(-8vw,6vh) scale(0.95)}}
 
 /* ========== 4. SECTION FADE-IN ON SCROLL ========== */
 .reveal-section{opacity:0;transform:translateY(40px);transition:opacity 0.8s cubic-bezier(0.16,1,0.3,1),transform 0.8s cubic-bezier(0.16,1,0.3,1)}
@@ -45,23 +55,77 @@ article:hover{
 #noise-overlay{position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:0.035;mix-blend-mode:overlay}
 
 /* ========== 8. PAGE LOAD TRANSITION ========== */
-#page-curtain{position:fixed;inset:0;z-index:10000;background:#0a0a0a;display:flex;align-items:center;justify-content:center;transition:opacity 0.6s cubic-bezier(0.16,1,0.3,1),transform 0.6s cubic-bezier(0.16,1,0.3,1)}
+#page-curtain{position:fixed;inset:0;z-index:10000;background:#060608;display:flex;align-items:center;justify-content:center;transition:opacity 0.6s cubic-bezier(0.16,1,0.3,1),transform 0.6s cubic-bezier(0.16,1,0.3,1)}
 #page-curtain.lift{opacity:0;transform:translateY(-100%);pointer-events:none}
 #page-curtain .loader-ring{width:40px;height:40px;border:2px solid #ffffff15;border-top-color:#8b5cf6;border-radius:50%;animation:loader-spin 0.8s linear infinite}
 @keyframes loader-spin{to{transform:rotate(360deg)}}
 
 /* BONUS: Smooth glow on nav */
-nav,header,[class*="backdrop-blur"]{border-bottom:1px solid #ffffff08!important;box-shadow:0 1px 30px #0a0a0a80}
+nav,header,[class*="backdrop-blur"]{border-bottom:1px solid #ffffff08!important;box-shadow:0 1px 30px #06060880}
+
+/* Glassmorphism Theme Fixes */
+.theme-dark{
+  --bg-base:#060608!important;
+  --bg-surface:#0b0b0e!important;
+  --card:0 0% 5%!important;
+  background-color:#060608!important;
+}
+.theme-light{
+  --bg-base:#f8f6f0!important;
+  --bg-surface:#f0ede4!important;
+  background-color:#f8f6f0!important;
+}
+.theme-dark article,
+.theme-dark section [class*="border"][class*="rounded"],
+.theme-dark a[class*="border"][class*="rounded"] {
+  background-color: rgba(11, 11, 14, 0.65) !important;
+  backdrop-filter: blur(16px);
+  border-color: rgba(255, 255, 255, 0.04) !important;
+}
+.theme-light article,
+.theme-light section [class*="border"][class*="rounded"],
+.theme-light a[class*="border"][class*="rounded"] {
+  background-color: rgba(240, 237, 228, 0.65) !important;
+  backdrop-filter: blur(16px);
+  border-color: rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Mouse spotlight glow inside cards */
+.spotlight-glow {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  background: radial-gradient(350px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), rgba(139,92,246,0.08), transparent 80%);
+}
+.theme-light .spotlight-glow {
+  background: radial-gradient(350px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), rgba(6,182,212,0.06), transparent 80%);
+}
+article:hover .spotlight-glow,
+section [class*="border"][class*="rounded"]:hover .spotlight-glow,
+a[class*="border"][class*="rounded"]:hover .spotlight-glow {
+  opacity: 1;
+}
+
+/* Ensure child elements stay above spotlight */
+article > *, 
+section [class*="border"][class*="rounded"] > *,
+a[class*="border"][class*="rounded"] > * {
+  position: relative;
+  z-index: 1;
+}
 
 /* Light theme adjustments */
-.theme-light #gradient-mesh{opacity:0.15}
+.theme-light #gradient-mesh{opacity:0.18}
 .theme-light #noise-overlay{opacity:0.02;mix-blend-mode:multiply}
-.theme-light #page-curtain{background:#fafafa}
+.theme-light #page-curtain{background:#f8f6f0}
 .theme-light #scroll-progress{box-shadow:0 0 12px #8b5cf640}
 </style>
 
 <script>!function(){try{var t=localStorage.getItem("portfolio-theme")||"dark";document.documentElement.classList.add("light"===t?"theme-light":"theme-dark")}catch(t){document.documentElement.classList.add("theme-dark")}}()</script>
-<script defer="defer" src="static/js/main.e1c64cec.js?v=9"></script>
+<script defer="defer" src="static/js/main.e1c64cec.js?v=10"></script>
 <link href="static/css/main.ec87ac61.css" rel="stylesheet">
 </head>
 <body>
@@ -73,7 +137,7 @@ nav,header,[class*="backdrop-blur"]{border-bottom:1px solid #ffffff08!important;
 <div id="scroll-progress"></div>
 
 <!-- Animated Gradient Mesh Background -->
-<div id="gradient-mesh"></div>
+<div id="gradient-mesh"><div id="gradient-mesh-3"></div></div>
 
 <!-- Noise Texture Overlay -->
 <svg id="noise-overlay" viewBox="0 0 512 512" preserveAspectRatio="none" style="width:100%;height:100%"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#noiseFilter)"/></svg>
@@ -191,6 +255,57 @@ nav,header,[class*="backdrop-blur"]{border-bottom:1px solid #ffffff08!important;
   }else{
     liftCurtain();
   }
+})();
+
+// ===== 9. 3D CARD TILT & SPOTLIGHT EFFECT =====
+(function(){
+  function init3DTilt(){
+    var root=document.getElementById("root");
+    if(!root||!root.children.length)return setTimeout(init3DTilt,300);
+    
+    var cards=root.querySelectorAll("article, section [class*='border'][class*='rounded'], a[class*='border'][class*='rounded']");
+    cards.forEach(function(card){
+      if(card.dataset.tilt3d)return;
+      card.dataset.tilt3d="1";
+      
+      // Create spotlight element inside the card
+      var glow=document.createElement("div");
+      glow.className="spotlight-glow";
+      card.insertBefore(glow, card.firstChild);
+      
+      card.style.transformStyle="preserve-3d";
+      card.style.transition="transform 0.15s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.15s ease";
+      
+      card.addEventListener("mousemove",function(e){
+        var rect=card.getBoundingClientRect();
+        var x=e.clientX-rect.left;
+        var y=e.clientY-rect.top;
+        
+        card.style.setProperty("--mouse-x", x+"px");
+        card.style.setProperty("--mouse-y", y+"px");
+        
+        var px=x/rect.width;
+        var py=y/rect.height;
+        var tiltX=(0.5-py)*8; // max 8 degrees to keep it subtle and premium
+        var tiltY=(px-0.5)*8;
+        
+        card.style.transform="perspective(1000px) rotateX("+tiltX+"deg) rotateY("+tiltY+"deg) scale3d(1.015,1.015,1.015)";
+      });
+      
+      card.addEventListener("mouseleave",function(){
+        card.style.transform="perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)";
+        card.style.transition="transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.5s ease";
+      });
+      
+      card.addEventListener("mouseenter",function(){
+        card.style.transition="transform 0.15s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.15s ease";
+      });
+    });
+  }
+  init3DTilt();
+  var mo=new MutationObserver(init3DTilt);
+  var root=document.getElementById("root");
+  if(root)mo.observe(root,{childList:true,subtree:true});
 })();
 </script>
 
