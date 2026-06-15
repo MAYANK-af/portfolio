@@ -34,7 +34,11 @@ new_js = """
     var journal = document.getElementById("journal");
     if (journal && !journal.querySelector(".sphere-3d")) {
       var s1 = document.createElement("div");
-      s1.className = "sphere-3d w-40 h-40 left-10 top-1/4";
+      s1.className = "sphere-3d";
+      s1.style.width = "160px";
+      s1.style.height = "160px";
+      s1.style.left = "40px";
+      s1.style.top = "25%";
       s1.style.animationDuration = "18s";
       journal.appendChild(s1);
     }
@@ -42,7 +46,11 @@ new_js = """
     var testimonials = document.getElementById("testimonials");
     if (testimonials && !testimonials.querySelector(".sphere-3d")) {
       var s2 = document.createElement("div");
-      s2.className = "sphere-3d w-48 h-48 right-12 top-1/3";
+      s2.className = "sphere-3d";
+      s2.style.width = "192px";
+      s2.style.height = "192px";
+      s2.style.right = "48px";
+      s2.style.top = "33%";
       s2.style.animationDuration = "22s";
       s2.style.animationName = "float-slower";
       testimonials.appendChild(s2);
@@ -51,7 +59,11 @@ new_js = """
     var contact = document.getElementById("contact");
     if (contact && !contact.querySelector(".sphere-3d")) {
       var s3 = document.createElement("div");
-      s3.className = "sphere-3d w-36 h-36 left-[10%] bottom-10";
+      s3.className = "sphere-3d";
+      s3.style.width = "144px";
+      s3.style.height = "144px";
+      s3.style.left = "10%";
+      s3.style.bottom = "40px";
       s3.style.animationDuration = "16s";
       contact.appendChild(s3);
     }
@@ -69,7 +81,6 @@ for html_path in html_paths:
             content = f.read()
         
         # We need to replace the old CSS spheres block with the new one
-        # Let's search for the start of the CSS sphere block
         start_css_marker = '/* ========== 3D FLOATING SPHERES IN LAST 3 SECTIONS ========== */'
         if start_css_marker in content:
             # Find the end of the style tag after the marker

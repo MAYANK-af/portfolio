@@ -144,6 +144,7 @@ a[class*="border"][class*="rounded"] > * {
 .theme-light #scroll-progress{box-shadow:0 0 12px #8b5cf640}
 
 
+
 /* ========== 3D FLOATING SPHERES IN LAST 3 SECTIONS ========== */
 .sphere-3d {
   position: absolute;
@@ -171,8 +172,8 @@ a[class*="border"][class*="rounded"] > * {
 <script>!function(){try{var t=localStorage.getItem("portfolio-theme")||"dark";document.documentElement.classList.add("light"===t?"theme-light":"theme-dark")}catch(t){document.documentElement.classList.add("theme-dark")}}()</script>
 <link rel="preload" as="image" href="/portfolio/static/media/profile_photo.jpeg" type="image/jpeg"/>
 <link rel="preload" as="image" href="/portfolio/static/media/cover_codesense.jpg" type="image/jpeg"/>
-<script defer="defer" src="/portfolio/static/js/main.e1c64cec.js?v=18"></script>
-<link href="/portfolio/static/css/main.ec87ac61.css?v=18" rel="stylesheet">
+<script defer="defer" src="/portfolio/static/js/main.e1c64cec.js?v=19"></script>
+<link href="/portfolio/static/css/main.ec87ac61.css?v=19" rel="stylesheet">
 </head>
 <body>
 
@@ -374,13 +375,18 @@ a[class*="border"][class*="rounded"] > * {
 })();
 
 
+
 // ===== 10. INJECT 3D FLOATING SPHERES =====
 (function() {
   function injectSpheres() {
     var journal = document.getElementById("journal");
     if (journal && !journal.querySelector(".sphere-3d")) {
       var s1 = document.createElement("div");
-      s1.className = "sphere-3d w-40 h-40 left-10 top-1/4";
+      s1.className = "sphere-3d";
+      s1.style.width = "160px";
+      s1.style.height = "160px";
+      s1.style.left = "40px";
+      s1.style.top = "25%";
       s1.style.animationDuration = "18s";
       journal.appendChild(s1);
     }
@@ -388,7 +394,11 @@ a[class*="border"][class*="rounded"] > * {
     var testimonials = document.getElementById("testimonials");
     if (testimonials && !testimonials.querySelector(".sphere-3d")) {
       var s2 = document.createElement("div");
-      s2.className = "sphere-3d w-48 h-48 right-12 top-1/3";
+      s2.className = "sphere-3d";
+      s2.style.width = "192px";
+      s2.style.height = "192px";
+      s2.style.right = "48px";
+      s2.style.top = "33%";
       s2.style.animationDuration = "22s";
       s2.style.animationName = "float-slower";
       testimonials.appendChild(s2);
@@ -397,7 +407,11 @@ a[class*="border"][class*="rounded"] > * {
     var contact = document.getElementById("contact");
     if (contact && !contact.querySelector(".sphere-3d")) {
       var s3 = document.createElement("div");
-      s3.className = "sphere-3d w-36 h-36 left-[10%] bottom-10";
+      s3.className = "sphere-3d";
+      s3.style.width = "144px";
+      s3.style.height = "144px";
+      s3.style.left = "10%";
+      s3.style.bottom = "40px";
       s3.style.animationDuration = "16s";
       contact.appendChild(s3);
     }
