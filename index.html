@@ -82,7 +82,7 @@ nav,header,[class*="backdrop-blur"]{border-bottom:1px solid #ffffff08!important;
 .theme-dark section [class*="border"][class*="rounded"],
 .theme-dark a[class*="border"][class*="rounded"] {
   background-color: rgba(11, 11, 14, 0.65) !important;
-  backdrop-filter: blur(16px);
+  backdrop-filter: blur(10px);
   border-color: rgba(255, 255, 255, 0.04) !important;
   position: relative;
   overflow: hidden;
@@ -91,7 +91,7 @@ nav,header,[class*="backdrop-blur"]{border-bottom:1px solid #ffffff08!important;
 .theme-light section [class*="border"][class*="rounded"],
 .theme-light a[class*="border"][class*="rounded"] {
   background-color: rgba(240, 237, 228, 0.65) !important;
-  backdrop-filter: blur(16px);
+  backdrop-filter: blur(10px);
   border-color: rgba(0, 0, 0, 0.06) !important;
   position: relative;
   overflow: hidden;
@@ -155,7 +155,14 @@ a[class*="border"][class*="rounded"] > * {
   border: 1px solid rgba(255, 255, 255, 0.08);
   pointer-events: none;
   z-index: 0;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
   animation: float-slow 15s ease-in-out infinite alternate;
+}
+
+/* Scroll Performance Optimizer */
+.disable-hover, .disable-hover * {
+  pointer-events: none !important;
 }
 @keyframes float-slow {
   0% { transform: translate(0, 0) rotate(0deg); }
@@ -172,8 +179,8 @@ a[class*="border"][class*="rounded"] > * {
 <script>!function(){try{var t=localStorage.getItem("portfolio-theme")||"dark";document.documentElement.classList.add("light"===t?"theme-light":"theme-dark")}catch(t){document.documentElement.classList.add("theme-dark")}}()</script>
 <link rel="preload" as="image" href="/portfolio/static/media/profile_photo.jpeg" type="image/jpeg"/>
 <link rel="preload" as="image" href="/portfolio/static/media/cover_codesense.jpg" type="image/jpeg"/>
-<script defer="defer" src="/portfolio/static/js/main.e1c64cec.js?v=19"></script>
-<link href="/portfolio/static/css/main.ec87ac61.css?v=19" rel="stylesheet">
+<script defer="defer" src="/portfolio/static/js/main.e1c64cec.js?v=20"></script>
+<link href="/portfolio/static/css/main.ec87ac61.css?v=20" rel="stylesheet">
 </head>
 <body>
 
@@ -325,40 +332,60 @@ a[class*="border"][class*="rounded"] > * {
 // ===== 9. 3D CARD TILT & SPOTLIGHT EFFECT (EVENT DELEGATION) =====
 (function(){
   var currentCard = null;
+  var isScrolling = false;
+  var scrollTimeout;
   
+  window.addEventListener("scroll", function() {
+    isScrolling = true;
+    clearTimeout(scrollTimeout);
+    if (!document.body.classList.contains("disable-hover")) {
+      document.body.classList.add("disable-hover");
+    }
+    scrollTimeout = setTimeout(function() {
+      isScrolling = false;
+      document.body.classList.remove("disable-hover");
+    }, 150);
+  }, {passive: true});
+  
+  var tiltFrame;
   document.addEventListener("mousemove", function(e){
+    if (isScrolling) return;
+    
     var target = e.target;
     if(!target) return;
     
-    // Find closest card element
-    var card = target.closest("article, a[class*='border'][class*='rounded'], button[class*='border'][class*='rounded'], .glass");
+    if (tiltFrame) cancelAnimationFrame(tiltFrame);
     
-    if(currentCard && currentCard !== card) {
-      resetCard(currentCard);
-      currentCard = null;
-    }
-    
-    if(!card) return;
-    
-    if(currentCard !== card) {
-      currentCard = card;
-      card.style.transformStyle = "preserve-3d";
-      card.style.transition = "transform 0.1s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.1s ease";
-    }
-    
-    var rect = card.getBoundingClientRect();
-    var x = e.clientX - rect.left;
-    var y = e.clientY - rect.top;
-    
-    card.style.setProperty("--mouse-x", x + "px");
-    card.style.setProperty("--mouse-y", y + "px");
-    
-    var px = x / rect.width;
-    var py = y / rect.height;
-    var tiltX = (0.5 - py) * 8; // Max 8 degrees tilt
-    var tiltY = (px - 0.5) * 8;
-    
-    card.style.transform = "perspective(1000px) rotateX(" + tiltX + "deg) rotateY(" + tiltY + "deg) scale3d(1.015,1.015,1.015)";
+    tiltFrame = requestAnimationFrame(function() {
+      var card = target.closest("article, a[class*='border'][class*='rounded'], button[class*='border'][class*='rounded'], .glass");
+      
+      if(currentCard && currentCard !== card) {
+        resetCard(currentCard);
+        currentCard = null;
+      }
+      
+      if(!card) return;
+      
+      if(currentCard !== card) {
+        currentCard = card;
+        card.style.transformStyle = "preserve-3d";
+        card.style.transition = "transform 0.1s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.1s ease";
+      }
+      
+      var rect = card.getBoundingClientRect();
+      var x = e.clientX - rect.left;
+      var y = e.clientY - rect.top;
+      
+      card.style.setProperty("--mouse-x", x + "px");
+      card.style.setProperty("--mouse-y", y + "px");
+      
+      var px = x / rect.width;
+      var py = y / rect.height;
+      var tiltX = (0.5 - py) * 8;
+      var tiltY = (px - 0.5) * 8;
+      
+      card.style.transform = "perspective(1000px) rotateX(" + tiltX + "deg) rotateY(" + tiltY + "deg) scale3d(1.015,1.015,1.015)";
+    });
   }, {passive: true});
   
   document.addEventListener("mouseleave", function(e){

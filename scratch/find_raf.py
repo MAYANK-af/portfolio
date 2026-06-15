@@ -1,12 +1,15 @@
-import re
-
-with open('static/js/main.e1c64cec.js', 'r', encoding='utf-8') as f:
+with open(r'e:\New folder\static\js\main.e1c64cec.js', 'r', encoding='utf-8') as f:
     content = f.read()
 
-# Search for requestAnimationFrame in the bundle
-matches = [m.start() for m in re.finditer(r'requestAnimationFrame', content)]
-print(f"Matches for requestAnimationFrame: {len(matches)}")
-for idx in matches[:10]:
-    start = max(0, idx - 150)
-    end = min(len(content), idx + 2500)
-    print(f"[{idx}]: ...{content[start:end]}...\n")
+import re
+
+# Find occurrences of addEventListener for scroll and wheel
+for event in ['scroll', 'wheel']:
+    print(f"\n--- OCCURRENCES OF '{event}' ---")
+    matches = [m.start() for m in re.finditer(event, content, re.IGNORECASE)]
+    print(f"Found {len(matches)} occurrences")
+    for idx, pos in enumerate(matches[:15]):
+        start = max(0, pos - 80)
+        end = min(len(content), pos + 150)
+        snippet = content[start:end].replace('\n', ' ')
+        print(f"  [{idx+1}] at {pos}: ...{snippet}...")
