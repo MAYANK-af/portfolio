@@ -57,14 +57,14 @@ article:hover{
 #noise-overlay{position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:0.035;mix-blend-mode:overlay;will-change:transform;contain:strict}
 
 /* ========== 8. PAGE LOAD TRANSITION ========== */
-#page-curtain{position:fixed;inset:0;z-index:10000;background:#060608;display:flex;align-items:center;justify-content:center;transition:opacity 0.25s cubic-bezier(0.16,1,0.3,1),transform 0.25s cubic-bezier(0.16,1,0.3,1)}
+
 #academic, #skills, #journal, #testimonials, #contact {
   content-visibility: auto;
   contain-intrinsic-size: 800px;
 }
-#page-curtain.lift{opacity:0;transform:translateY(-100%);pointer-events:none}
-#page-curtain .loader-ring{width:40px;height:40px;border:2px solid #ffffff15;border-top-color:#8b5cf6;border-radius:50%;animation:loader-spin 0.8s linear infinite}
-@keyframes loader-spin{to{transform:rotate(360deg)}}
+
+
+
 
 /* BONUS: Smooth glow on nav */
 nav,header,[class*="backdrop-blur"]{border-bottom:1px solid #ffffff08!important;box-shadow:0 1px 30px #06060880}
@@ -177,6 +177,25 @@ a[class*="border"][class*="rounded"] > * {
   50% { transform: translate(-30px, 30px) scale(0.95); }
   100% { transform: translate(20px, -20px) scale(1.05); }
 }
+
+/* ========== APP SHELL RESPONSIVE GRID ========== */
+.lg-grid-cols-12-custom {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 48px;
+  align-items: center;
+}
+@media (min-width: 1024px) {
+  .lg-grid-cols-12-custom {
+    grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+  }
+  .lg-col-span-8-custom {
+    grid-column: span 8 / span 8 !important;
+  }
+  .lg-col-span-4-custom {
+    grid-column: span 4 / span 4 !important;
+  }
+}
 </style>
 
 <script>!function(){try{var t=localStorage.getItem("portfolio-theme")||"dark";document.documentElement.classList.add("light"===t?"theme-light":"theme-dark")}catch(t){document.documentElement.classList.add("theme-dark")}}()</script>
@@ -187,8 +206,7 @@ a[class*="border"][class*="rounded"] > * {
 </head>
 <body>
 
-<!-- Page Load Curtain -->
-<div id="page-curtain"><div class="loader-ring"></div></div>
+
 
 <!-- Scroll Progress Bar -->
 <div id="scroll-progress"></div>
@@ -200,7 +218,42 @@ a[class*="border"][class*="rounded"] > * {
 <svg id="noise-overlay" viewBox="0 0 512 512" preserveAspectRatio="none" style="width:100%;height:100%"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#noiseFilter)"/></svg>
 
 <noscript>You need to enable JavaScript to run this app.</noscript>
-<div id="root"></div>
+<div id="root"><div style="min-height: 100vh; display: flex; flex-direction: column; justify-content: center; background: #060608; color: #fff; font-family: 'General Sans', 'Cabinet Grotesk', sans-serif;">
+    <div style="max-w: 1800px; margin: 0 auto; padding: 24px; width: 100%; box-sizing: border-box;">
+      <div class="lg-grid-cols-12-custom">
+        <!-- Text Column -->
+        <div class="lg-col-span-8-custom">
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
+            <span style="width: 10px; height: 10px; border-radius: 50%; background: #8b5cf6;"></span>
+            <span style="font-family: monospace; font-size: 12px; text-transform: uppercase; letter-spacing: 0.2em; color: #8b5cf6;">Available for roles</span>
+          </div>
+          <h1 style="font-size: clamp(3rem, 10vw, 7rem); font-family: 'Cabinet Grotesk', sans-serif; font-weight: 800; line-height: 0.95; margin: 0 0 24px 0; color: #fff;">
+            MAYANK<br><span style="color: #71717a;">YADAV.</span>
+          </h1>
+          <p style="font-size: 1.125rem; line-height: 1.6; color: #d4d4d8; max-width: 36rem; margin: 0;">
+            Third-year B.Tech CSE (Data Science) student at Manipal University Jaipur. I design and ship production-grade Agentic AI systems and cinematic scroll-driven web experiences.
+          </p>
+        </div>
+        
+        <!-- Image Column -->
+        <div class="lg-col-span-4-custom" style="max-width: 400px; width: 100%; margin: 0 auto;">
+          <div style="background: rgba(11, 11, 14, 0.65); border: 1px solid rgba(255, 255, 255, 0.04); border-radius: 12px; padding: 24px; box-sizing: border-box; backdrop-filter: blur(10px);">
+            <p style="font-family: monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.22em; color: #71717a; margin: 0 0 16px 0;">Operator</p>
+            <div style="aspect-ratio: 3/4; width: 100%; overflow: hidden; border-radius: 8px; position: relative;">
+              <img src="/portfolio/static/media/profile_photo.jpeg?v=22" alt="Mayank Yadav" style="width: 100%; height: 100%; object-fit: cover; filter: contrast(1.1);" />
+            </div>
+            <div style="margin-top: 24px; display: flex; align-items: center; justify-content: space-between;">
+              <div>
+                <p style="font-size: 1.25rem; font-weight: 700; margin: 0; color: #fff;">Mayank Yadav</p>
+                <p style="font-family: monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.18em; color: #71717a; margin: 4px 0 0 0;">B.Tech CSE &middot; Data Science</p>
+              </div>
+              <span style="width: 8px; height: 8px; border-radius: 50%; background: #34d399;"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div></div>
 
 <script>
 // ===== 1. SCROLL PROGRESS BAR =====
@@ -307,30 +360,7 @@ a[class*="border"][class*="rounded"] > * {
   initMagnetic();
 })();
 
-// ===== 8. PAGE LOAD TRANSITION =====
-(function(){
-  function liftCurtain(){
-    var curtain=document.getElementById("page-curtain");
-    if(!curtain)return;
-    var root=document.getElementById("root");
-    function check(){
-      if(root&&root.children.length>0){
-        setTimeout(function(){
-          curtain.classList.add("lift");
-          setTimeout(function(){curtain.remove()},350);
-        },30);
-      }else{
-        setTimeout(check,50);
-      }
-    }
-    check();
-  }
-  if(document.readyState==="loading"){
-    document.addEventListener("DOMContentLoaded",liftCurtain);
-  }else{
-    liftCurtain();
-  }
-})();
+
 
 // ===== 9. 3D CARD TILT & SPOTLIGHT EFFECT (EVENT DELEGATION) =====
 (function(){
