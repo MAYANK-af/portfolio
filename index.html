@@ -30,7 +30,7 @@ article:hover{
 
 /* ========== 3. ANIMATED GRADIENT MESH BACKGROUND ========== */
 #gradient-mesh{position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:0.45}
-#gradient-mesh::before,#gradient-mesh::after,#gradient-mesh-3{content:"";position:absolute;border-radius:50%;filter:blur(130px);pointer-events:none}
+#gradient-mesh::before,#gradient-mesh::after,#gradient-mesh-3{content:"";position:absolute;border-radius:50%;filter:blur(60px);pointer-events:none}
 #gradient-mesh::before{width:60vw;height:60vh;top:-10%;left:-10%;background:radial-gradient(circle,rgba(30,27,75,0.75) 0%,transparent 70%);animation:mesh-drift-1 25s ease-in-out infinite alternate}
 #gradient-mesh::after{width:50vw;height:50vh;bottom:-15%;right:-15%;background:radial-gradient(circle,rgba(12,74,110,0.75) 0%,transparent 70%);animation:mesh-drift-2 20s ease-in-out infinite alternate-reverse}
 #gradient-mesh-3{width:45vw;height:45vh;top:25%;left:25%;background:radial-gradient(circle,rgba(76,29,149,0.45) 0%,transparent 70%);animation:mesh-drift-3 22s ease-in-out infinite alternate}
@@ -142,12 +142,35 @@ a[class*="border"][class*="rounded"] > * {
 .theme-light #noise-overlay{opacity:0.02;mix-blend-mode:multiply}
 .theme-light #page-curtain{background:#f8f6f0}
 .theme-light #scroll-progress{box-shadow:0 0 12px #8b5cf640}
+
+/* ========== 3D FLOATING SPHERES IN LAST 3 SECTIONS ========== */
+.sphere-3d {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.01) 50%, rgba(255, 255, 255, 0) 100%);
+  box-shadow: inset -6px -6px 16px rgba(255, 255, 255, 0.02), inset 4px 4px 12px rgba(255, 255, 255, 0.04), 0 0 20px rgba(255, 255, 255, 0.01);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  pointer-events: none;
+  z-index: 0;
+  animation: float-slow 15s ease-in-out infinite alternate;
+}
+@keyframes float-slow {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(25px, -25px) scale(1.05); }
+  100% { transform: translate(-15px, 20px) scale(0.95); }
+}
+@keyframes float-slower {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(-30px, 30px) scale(0.95); }
+  100% { transform: translate(20px, -20px) scale(1.05); }
+}
 </style>
 
 <script>!function(){try{var t=localStorage.getItem("portfolio-theme")||"dark";document.documentElement.classList.add("light"===t?"theme-light":"theme-dark")}catch(t){document.documentElement.classList.add("theme-dark")}}()</script>
 <link rel="preload" as="image" href="/portfolio/static/media/profile_photo.jpeg" type="image/jpeg"/>
-<script defer="defer" src="/portfolio/static/js/main.e1c64cec.js?v=16"></script>
-<link href="/portfolio/static/css/main.ec87ac61.css?v=16" rel="stylesheet">
+<link rel="preload" as="image" href="/portfolio/static/media/cover_codesense.jpg" type="image/jpeg"/>
+<script defer="defer" src="/portfolio/static/js/main.e1c64cec.js?v=17"></script>
+<link href="/portfolio/static/css/main.ec87ac61.css?v=17" rel="stylesheet">
 </head>
 <body>
 
@@ -305,7 +328,7 @@ a[class*="border"][class*="rounded"] > * {
     if(!target) return;
     
     // Find closest card element
-    var card = target.closest("article, section [class*='border'][class*='rounded'], a[class*='border'][class*='rounded']");
+    var card = target.closest("article, a[class*='border'][class*='rounded'], button[class*='border'][class*='rounded'], .glass");
     
     if(currentCard && currentCard !== card) {
       resetCard(currentCard);
@@ -346,6 +369,43 @@ a[class*="border"][class*="rounded"] > * {
     card.style.transition = "transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.5s ease";
     card.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)";
   }
+})();
+
+// ===== 10. INJECT 3D FLOATING SPHERES =====
+(function() {
+  function injectSpheres() {
+    var journal = document.getElementById("journal");
+    var testimonials = document.getElementById("testimonials");
+    var contact = document.getElementById("contact");
+    
+    if (journal && testimonials && contact) {
+      if (!document.querySelector(".sphere-3d")) {
+        // Inject in Journal
+        var s1 = document.createElement("div");
+        s1.className = "sphere-3d w-40 h-40 left-10 top-1/4";
+        s1.style.animationDuration = "18s";
+        journal.appendChild(s1);
+        
+        // Inject in Testimonials
+        var s2 = document.createElement("div");
+        s2.className = "sphere-3d w-48 h-48 right-12 top-1/3";
+        s2.style.animationDuration = "22s";
+        s2.style.animationName = "float-slower";
+        testimonials.appendChild(s2);
+        
+        // Inject in Contact
+        var s3 = document.createElement("div");
+        s3.className = "sphere-3d w-36 h-36 left-[10%] bottom-10";
+        s3.style.animationDuration = "16s";
+        contact.appendChild(s3);
+        
+        console.log("3D spheres successfully injected into the last 3 sections!");
+      }
+    } else {
+      setTimeout(injectSpheres, 300);
+    }
+  }
+  injectSpheres();
 })();
 </script>
 
