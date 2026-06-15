@@ -385,43 +385,47 @@ a[class*="border"][class*="rounded"] > * {
   }, {passive: true});
   
   var tiltFrame;
+  var lastTarget = null;
   document.addEventListener("mousemove", function(e){
     if (isScrolling) return;
     
     var target = e.target;
     if(!target) return;
     
+    if (target !== lastTarget) {
+      lastTarget = target;
+      var newCard = target.closest("article, a[class*='border'][class*='rounded'], button[class*='border'][class*='rounded'], .glass");
+      if (currentCard && currentCard !== newCard) {
+        resetCard(currentCard);
+      }
+      currentCard = newCard;
+    }
+    
+    if(!currentCard) return;
+    
     if (tiltFrame) cancelAnimationFrame(tiltFrame);
     
     tiltFrame = requestAnimationFrame(function() {
-      var card = target.closest("article, a[class*='border'][class*='rounded'], button[class*='border'][class*='rounded'], .glass");
+      if(!currentCard) return;
       
-      if(currentCard && currentCard !== card) {
-        resetCard(currentCard);
-        currentCard = null;
+      if (currentCard.style.transformStyle !== "preserve-3d") {
+        currentCard.style.transformStyle = "preserve-3d";
+        currentCard.style.transition = "transform 0.1s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.1s ease";
       }
       
-      if(!card) return;
-      
-      if(currentCard !== card) {
-        currentCard = card;
-        card.style.transformStyle = "preserve-3d";
-        card.style.transition = "transform 0.1s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.1s ease";
-      }
-      
-      var rect = card.getBoundingClientRect();
+      var rect = currentCard.getBoundingClientRect();
       var x = e.clientX - rect.left;
       var y = e.clientY - rect.top;
       
-      card.style.setProperty("--mouse-x", x + "px");
-      card.style.setProperty("--mouse-y", y + "px");
+      currentCard.style.setProperty("--mouse-x", x + "px");
+      currentCard.style.setProperty("--mouse-y", y + "px");
       
       var px = x / rect.width;
       var py = y / rect.height;
       var tiltX = (0.5 - py) * 8;
       var tiltY = (px - 0.5) * 8;
       
-      card.style.transform = "perspective(1000px) rotateX(" + tiltX + "deg) rotateY(" + tiltY + "deg) scale3d(1.015,1.015,1.015)";
+      currentCard.style.transform = "perspective(1000px) rotateX(" + tiltX + "deg) rotateY(" + tiltY + "deg) scale3d(1.015,1.015,1.015)";
     });
   }, {passive: true});
   
