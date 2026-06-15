@@ -15,7 +15,7 @@ a[class*="border"][class*="rounded"],
 article{
   position:relative;
   overflow:hidden;
-  transition:border-color 0.3s,box-shadow 0.3s;
+  transition:border-color 0.15s,box-shadow 0.15s;
 }
 section [class*="border"][class*="rounded"]:hover,
 a[class*="border"][class*="rounded"]:hover,
@@ -24,12 +24,11 @@ article:hover{
   background-image:linear-gradient(hsl(var(--card)),hsl(var(--card))),linear-gradient(var(--glow-angle),#06b6d4,#8b5cf6,#ec4899,#06b6d4);
   background-origin:border-box;
   background-clip:padding-box,border-box;
-  animation:glow-rotate 3s linear infinite;
-  box-shadow:0 0 30px rgba(139,92,246,0.15),0 0 50px rgba(6,182,212,0.1);
+  box-shadow:0 0 20px rgba(139,92,246,0.12),0 0 40px rgba(6,182,212,0.08);
 }
 
 /* ========== 3. ANIMATED GRADIENT MESH BACKGROUND ========== */
-#gradient-mesh{position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:0.45}
+#gradient-mesh{position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:0.45;will-change:transform;contain:strict}
 #gradient-mesh::before,#gradient-mesh::after,#gradient-mesh-3{content:"";position:absolute;border-radius:50%;filter:blur(60px);pointer-events:none}
 #gradient-mesh::before{width:60vw;height:60vh;top:-10%;left:-10%;background:radial-gradient(circle,rgba(30,27,75,0.75) 0%,transparent 70%);animation:mesh-drift-1 25s ease-in-out infinite alternate}
 #gradient-mesh::after{width:50vw;height:50vh;bottom:-15%;right:-15%;background:radial-gradient(circle,rgba(12,74,110,0.75) 0%,transparent 70%);animation:mesh-drift-2 20s ease-in-out infinite alternate-reverse}
@@ -39,7 +38,7 @@ article:hover{
 @keyframes mesh-drift-3{0%{transform:translate(0,0) scale(1)}50%{transform:translate(6vw,-8vh) scale(1.1)}100%{transform:translate(-8vw,6vh) scale(0.95)}}
 
 /* ========== 4. SECTION FADE-IN ON SCROLL ========== */
-.reveal-section{opacity:0;transform:translateY(40px);transition:opacity 0.8s cubic-bezier(0.16,1,0.3,1),transform 0.8s cubic-bezier(0.16,1,0.3,1)}
+.reveal-section{opacity:0;transform:translateY(40px);transition:opacity 0.8s cubic-bezier(0.16,1,0.3,1),transform 0.8s cubic-bezier(0.16,1,0.3,1);contain:layout style}
 .reveal-section.revealed{opacity:1;transform:translateY(0)}
 .reveal-section.revealed>*:nth-child(1){transition-delay:0s}
 .reveal-section.revealed>*:nth-child(2){transition-delay:0.08s}
@@ -55,7 +54,7 @@ article:hover{
 [data-magnetic]{transition:transform 0.3s cubic-bezier(0.33,1,0.68,1)}
 
 /* ========== 7. NOISE TEXTURE OVERLAY ========== */
-#noise-overlay{position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:0.035;mix-blend-mode:overlay}
+#noise-overlay{position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:0.035;mix-blend-mode:overlay;will-change:transform;contain:strict}
 
 /* ========== 8. PAGE LOAD TRANSITION ========== */
 #page-curtain{position:fixed;inset:0;z-index:10000;background:#060608;display:flex;align-items:center;justify-content:center;transition:opacity 0.6s cubic-bezier(0.16,1,0.3,1),transform 0.6s cubic-bezier(0.16,1,0.3,1)}
@@ -107,7 +106,7 @@ nav,header,[class*="backdrop-blur"]{border-bottom:1px solid #ffffff08!important;
   z-index: 0;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.35s ease;
+  transition: opacity 0.15s ease;
   background: radial-gradient(350px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), rgba(139, 92, 246, 0.08), transparent 80%);
 }
 .theme-light article::before,
@@ -119,7 +118,7 @@ nav,header,[class*="backdrop-blur"]{border-bottom:1px solid #ffffff08!important;
   z-index: 0;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.35s ease;
+  transition: opacity 0.15s ease;
   background: radial-gradient(350px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), rgba(6, 182, 212, 0.06), transparent 80%);
 }
 
@@ -177,10 +176,10 @@ a[class*="border"][class*="rounded"] > * {
 </style>
 
 <script>!function(){try{var t=localStorage.getItem("portfolio-theme")||"dark";document.documentElement.classList.add("light"===t?"theme-light":"theme-dark")}catch(t){document.documentElement.classList.add("theme-dark")}}()</script>
-<link rel="preload" as="image" href="/portfolio/static/media/profile_photo.jpeg" type="image/jpeg"/>
+<link rel="preload" as="image" href="/portfolio/static/media/profile_photo.jpeg?v=22" type="image/jpeg"/>
 <link rel="preload" as="image" href="/portfolio/static/media/cover_codesense.jpg" type="image/jpeg"/>
-<script defer="defer" src="/portfolio/static/js/main.e1c64cec.js?v=20"></script>
-<link href="/portfolio/static/css/main.ec87ac61.css?v=20" rel="stylesheet">
+<script defer="defer" src="/portfolio/static/js/main.e1c64cec.js?v=21"></script>
+<link href="/portfolio/static/css/main.ec87ac61.css?v=21" rel="stylesheet">
 </head>
 <body>
 
@@ -194,10 +193,10 @@ a[class*="border"][class*="rounded"] > * {
 <div id="gradient-mesh"><div id="gradient-mesh-3"></div></div>
 
 <!-- Noise Texture Overlay -->
-<svg id="noise-overlay" viewBox="0 0 512 512" preserveAspectRatio="none" style="width:100%;height:100%"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#noiseFilter)"/></svg>
+<svg id="noise-overlay" viewBox="0 0 512 512" preserveAspectRatio="none" style="width:100%;height:100%"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#noiseFilter)"/></svg>
 
 <noscript>You need to enable JavaScript to run this app.</noscript>
-<div id="root"></div>
+<div id="root" style="content-visibility:auto"></div>
 
 <script>
 // ===== 1. SCROLL PROGRESS BAR =====
